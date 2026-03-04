@@ -64,7 +64,7 @@ let products = [
     {
         id: 7,
         name: "Buffet Tray with Repellent",
-        price: 160.00,
+        price: 175.00,
         originalPrice: 220.00,
         category: "Kitchen",
         image: "buffet tray.jpeg",
@@ -830,3 +830,4 @@ function setupEventListeners() {
         }
     });
 }
+
