@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartServe.co - Futuristic E-Commerce</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- header -->
+        <div class="header">
+            <div class="logo">
+                <h1>⚡ SmartServe<span>.co</span></h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for products...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <button class="sell-btn" id="sellBtn">
+                    <i class="fas fa-plus"></i> <span>Sell Item</span>
+                </button>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="auth-btn signin-btn" id="signInBtn">Sign In</button>
+                    <button class="auth-btn signup-btn" id="signUpBtn">Sign Up</button>
+                </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="welcome-text">Welcome, <strong id="userName">User</strong></span>
+                    <button class="auth-btn logout-btn" id="logOutBtn">Log Out</button>
+                </div>
+                <div class="cart-badge">
+                    <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- store view -->
+        <div id="storeView" class="store-view">
+            <div class="product-section">
+                <h2><i class="fas fa-store" style="margin-right: 0.5rem;"></i> Recommended for you</h2>
+                <div class="product-grid" id="productGrid"></div>
+            </div>
+            <div class="cart-sidebar" id="cartSidebar">
+                <h3><i class="fas fa-shopping-bag"></i> Your cart</h3>
+                <div class="cart-items" id="cartItemsContainer"></div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotalPrice">RM 0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn" disabled>
+                    <i class="fas fa-lock"></i> Checkout
+                </button>
+            </div>
+        </div>
+
+        <!-- checkout view -->
+        <div id="checkoutView" class="checkout-view">
+            <div class="checkout-container">
+                <button class="back-to-shop" id="backToShopBtn"><i class="fas fa-arrow-left"></i> Continue shopping</button>
+                <h2>Checkout</h2>
+                <div id="orderSummaryContainer" class="order-summary">
+                    <h3>Order summary</h3>
+                    <div id="summaryList" class="summary-list"></div>
+                    <div class="discount-row" id="discountRow" style="display: none;">
+                        <span>Discount (FLYAWAY - 15%):</span>
+                        <span id="discountAmount">- RM 0</span>
+                    </div>
+                    <div class="summary-total" id="summaryTotal">Total: RM 0</div>
+                </div>
+                
+                <!-- Promo Code Section -->
+                <div class="promo-section">
+                    <h3><i class="fas fa-tag"></i> Promo Code</h3>
+                    <div class="promo-input-group">
+                        <input type="text" id="promoCodeInput" placeholder="Enter promo code">
+                        <button id="applyPromoBtn">Apply</button>
+                    </div>
+                    <p class="promo-note">Try use promo code to get discount!</p>
+                    <p class="promo-message" id="promoMessage"></p>
+                </div>
+                
+                <div class="checkout-form">
+                    <h3>Shipping details</h3>
+                    <label for="fullname">Full name</label>
+                    <input type="text" id="fullname" value="Test User">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" value="123 SmartServe Ave">
+                    <div class="form-row">
+                        <div><label for="city">City</label><input type="text" id="city" value="Kuala Lumpur"></div>
+                        <div><label for="zip">Postal code</label><input type="text" id="zip" value="50000"></div>
+                    </div>
+                    <label for="payment">Payment method</label>
+                    <select id="payment">
+                        <option value="credit">💳 Credit card (mock)</option>
+                        <option value="paypal">📱 Touch 'n Go eWallet (mock)</option>
+                        <option value="cod">💵 Cash on delivery</option>
+                    </select>
+                    <button class="place-order-btn" id="placeOrderBtn"><i class="fas fa-check-circle"></i> Place order (demo)</button>
+                </div>
+            </div>
+        </div>
+        <footer>⚡ SmartServe.co </footer>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="productDetailModal">
+        <div class="modal product-detail-modal">
+            <div class="modal-header">
+                <h2 id="detailProductName">Product Name</h2>
+                <button class="modal-close" id="detailClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="product-detail-image" id="detailImage">
+                    <!-- Image will be inserted here -->
+                </div>
+                <div class="product-detail-info">
+                    <span class="category-tag" id="detailCategory">Category</span>
+                    <div class="product-detail-price" id="detailPrice">RM 0</div>
+                    <p class="product-detail-description" id="detailDescription">Description</p>
+                    <button class="add-to-cart-btn" id="detailAddToCart">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div class="modal-overlay" id="signInModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-sign-in-alt"></i> Sign In</h2>
+                <button class="modal-close" id="signInClose"><i class="fas fa-times"></i></button>
+            </div>
+            <form class="modal-body" id="signInForm">
+                <div class="form-group">
+                    <label for="signInEmail">Email</label>
+                    <input type="email" id="signInEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signInPassword">Password</label>
+                    <input type="password" id="signInPassword" required placeholder="Enter your password">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="signInCancel">Cancel</button>
+                    <button type="submit" class="submit-btn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay" id="signUpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+                <button class="modal-close" id="signUpClose"><i class="fas fa-times"></i></button>
+            </div>
+            <form class="modal-body" id="signUpForm">
+                <div class="form-group">
+                    <label for="signUpName">Full Name</label>
+                    <input type="text" id="signUpName" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="signUpEmail">Email</label>
+                    <input type="email" id="signUpEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" id="signUpPassword" required placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="signUpPhone">Phone Number</label>
+                    <input type="tel" id="signUpPhone" placeholder="+60XXXXXXXXX">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="signUpCancel">Cancel</button>
+                    <button type="submit" class="submit-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Add New Product</h2>
+                <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            </div>
+            <form class="modal-body" id="addProductForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required placeholder="Enter product name">
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (RM)</label>
+                    <input type="number" id="productPrice" required min="0" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="productOriginalPrice">Original Price (RM) - Optional</label>
+                    <input type="number" id="productOriginalPrice" min="0" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select category</option>
+                        <option value="Kitchen">Kitchen</option>
+                        <option value="Home">Home</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Lighting">Lighting</option>
+                        <option value="Cooling">Cooling</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <div class="image-input-options">
+                        <label class="image-option">
+                            <input type="radio" name="imageSource" value="url" checked> 
+                            <span>From URL</span>
+                        </label>
+                        <label class="image-option">
+                            <input type="radio" name="imageSource" value="file"> 
+                            <span>Upload File</span>
+                        </label>
+                    </div>
+                    <input type="url" id="productImage" placeholder="https://example.com/image.jpg" class="image-url-input">
+                    <input type="file" id="productImageFile" accept="image/*" class="image-file-input" style="display: none;">
+                    <p class="form-hint">Paste an image URL or upload a file</p>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" required placeholder="Enter product description"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="submit-btn"><i class="fas fa-plus"></i> Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <h2>Order Placed!</h2>
+        <p>Thank you for your purchase. Your order has been placed successfully.</p>
+        <button id="successCloseBtn">Continue Shopping</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
