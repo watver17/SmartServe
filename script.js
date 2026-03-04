@@ -67,7 +67,7 @@ let products = [
         price: 175.00,
         originalPrice: 220.00,
         category: "Kitchen",
-        image: "buffet tray.jpeg",
+        image: "withrepellent.jpeg",
         description: "Buffet tray combination with fly repellent and temperature control unit."
     }
 ];
@@ -830,4 +830,5 @@ function setupEventListeners() {
         }
     });
 }
+
 
